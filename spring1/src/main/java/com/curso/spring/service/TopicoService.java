@@ -7,11 +7,13 @@ import com.curso.spring.model.form.TopicoInsertForm;
 import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicoService {
@@ -45,14 +47,19 @@ public class TopicoService {
         return topico;
     }
 
-    public TopicoDetalheDto carregar(Long pIdTopico) {
+    public ResponseEntity<TopicoDetalheDto> carregar(Long pIdTopico) {
 
-        return new TopicoDetalheDto(topicoRepository.getById(pIdTopico));
+        Optional<TopicoEntity> topicoConsulta = topicoRepository.findById(pIdTopico);
+
+        if (topicoConsulta.isPresent()) {
+
+            return ResponseEntity.ok(new TopicoDetalheDto(topicoConsulta.get()));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
-    public TopicoEntity update(Long pIdTopico, TopicoUpdateForm pTopico) {
-
-        TopicoEntity topico = pTopico.update(pIdTopico, topicoRepository);
+    public ResponseEntity<TopicoDto> update(Long pIdTopico, TopicoUpdateForm pTopico) {
 
         /*
             Não precisa chamar um método específico para atualizar as informações,
@@ -61,11 +68,27 @@ public class TopicoService {
          */
 //        topicoRepository.save(topico);
 
-        return topico;
+        Optional<TopicoEntity> topicoConsulta = topicoRepository.findById(pIdTopico);
+
+        if (topicoConsulta.isPresent()) {
+            TopicoEntity topico = pTopico.update(topicoConsulta.get());
+
+            return ResponseEntity.ok(new TopicoDto(topicoConsulta.get()));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
-    public void delete(Long pIdTopico) {
+    public ResponseEntity delete(Long pIdTopico) {
 
-        topicoRepository.deleteById(pIdTopico);
+        Optional<TopicoEntity> topicoConsulta = topicoRepository.findById(pIdTopico);
+
+        if (topicoConsulta.isPresent()) {
+            topicoRepository.deleteById(pIdTopico);
+
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 }

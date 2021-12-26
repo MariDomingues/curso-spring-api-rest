@@ -29,7 +29,7 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    public TopicoDetalheDto carregar(@PathVariable("id") Long pIdTopico) {
+    public ResponseEntity<TopicoDetalheDto> carregar(@PathVariable("id") Long pIdTopico) {
 
         return topicoService.carregar(pIdTopico);
     }
@@ -51,17 +51,14 @@ public class TopicoController {
     public ResponseEntity<TopicoDto> update(@PathVariable("id") Long pIdTopico,
                                             @RequestBody @Valid TopicoUpdateForm pTopico) {
 
-        TopicoEntity topico = topicoService.update(pIdTopico, pTopico);
+        return topicoService.update(pIdTopico, pTopico);
 
-        return ResponseEntity.ok(new TopicoDto(topico));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity delete(@PathVariable("id") Long pIdTopico) {
 
-        topicoService.delete(pIdTopico);
-
-        return ResponseEntity.ok().build();
+        return topicoService.delete(pIdTopico);
     }
 }

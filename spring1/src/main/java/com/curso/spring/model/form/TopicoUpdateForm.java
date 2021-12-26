@@ -31,12 +31,11 @@ public class TopicoUpdateForm {
 		this.mensagem = mensagem;
 	}
 
-	public TopicoEntity update(Long pIdTopico, TopicoRepository pTopicoRepository) {
+	public TopicoEntity update(TopicoEntity pTopico) {
 
-		TopicoEntity topico = pTopicoRepository.getById(pIdTopico);
-		topico.setTitulo(this.getTitulo());
-		topico.setMensagem(this.getMensagem());
+		pTopico.setTitulo(this.getTitulo());
+		pTopico.setMensagem(this.getMensagem());
 
-		return topico;
+		return pTopico;
 	}
 }
