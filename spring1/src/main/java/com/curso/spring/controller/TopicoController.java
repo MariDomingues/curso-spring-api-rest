@@ -9,6 +9,8 @@ import com.curso.spring.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +26,11 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @GetMapping
-    //URL: localhost:8080/topico?page=0&size=10&sort=id,asc
+    //URL: localhost:8080/topico?page=0&size=10&sort=id,asc&sort=dataCriacao,asc
     //RequestParam indica que é um parâmetro obrigatório e ele vem pela URL
     public Page<TopicoDto> lista(@RequestParam(required = false) String pNomeCurso,
-                                 @RequestParam Pageable pPageable) {
+                                 //caso não venha nenhuma ordenação, ele vai ordenar o PageableDefault
+                                 @RequestParam @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pPageable) {
 
         return topicoService.consultar(pNomeCurso, pPageable);
     }
