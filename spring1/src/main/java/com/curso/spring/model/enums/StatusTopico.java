@@ -1,4 +1,4 @@
-package com.curso.spring.model;
+package com.curso.spring.model.enums;
 
 public enum StatusTopico {
 	

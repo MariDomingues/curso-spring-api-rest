@@ -1,51 +1,46 @@
-package com.curso.spring.model;
+package com.curso.spring.model.entity;
 
 import com.curso.spring.model.enums.StatusTopico;
+import com.curso.spring.model.form.TopicoForm;
+import com.curso.spring.service.CursoService;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Topico {
+@Entity
+@Table(name = "topico")
+public class TopicoEntity {
 
+	@Id
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
 	private String titulo;
 	private String mensagem;
 	private LocalDateTime dataCriacao = LocalDateTime.now();
+
+	@Enumerated(EnumType.STRING)
 	private StatusTopico status = StatusTopico.NAO_RESPONDIDO;
-	private Usuario autor;
-	private Curso curso;
-	private List<Resposta> respostas = new ArrayList<>();
 
-	public Topico(String titulo, String mensagem, Curso curso) {
-		this.titulo = titulo;
-		this.mensagem = mensagem;
-		this.curso = curso;
+	@ManyToOne
+	private UsuarioEntity autor;
+
+	@ManyToOne
+	private CursoEntity curso;
+
+	@OneToMany(mappedBy = "topico")
+	private List<RespostaEntity> vResposta = new ArrayList<>();
+
+	public TopicoEntity() {
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+	public TopicoEntity(TopicoForm pTopico, CursoService cursoService) {
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Topico other = (Topico) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		this.titulo = pTopico.getTitulo();
+		this.mensagem = pTopico.getMensagem();
+		this.autor = pTopico.getAutor();
+		this.curso = cursoService.findByNome(pTopico.getCurso());
 	}
 
 	public Long getId() {
@@ -88,28 +83,28 @@ public class Topico {
 		this.status = status;
 	}
 
-	public Usuario getAutor() {
+	public UsuarioEntity getAutor() {
 		return autor;
 	}
 
-	public void setAutor(Usuario autor) {
+	public void setAutor(UsuarioEntity autor) {
 		this.autor = autor;
 	}
 
-	public Curso getCurso() {
+	public CursoEntity getCurso() {
 		return curso;
 	}
 
-	public void setCurso(Curso curso) {
-		this.curso = curso;
+	public void setCurso(CursoEntity cursoEntity) {
+		this.curso = cursoEntity;
 	}
 
-	public List<Resposta> getRespostas() {
-		return respostas;
+	public List<RespostaEntity> getRespostas() {
+		return vResposta;
 	}
 
-	public void setRespostas(List<Resposta> respostas) {
-		this.respostas = respostas;
+	public void setRespostas(List<RespostaEntity> respostaEntities) {
+		this.vResposta = respostaEntities;
 	}
 
 }
