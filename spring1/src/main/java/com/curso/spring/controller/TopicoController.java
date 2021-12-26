@@ -35,6 +35,7 @@ public class TopicoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico, UriComponentsBuilder uriComponentsBuilder) {
 
         TopicoEntity topico = topicoService.insert(pTopico);
@@ -48,11 +49,19 @@ public class TopicoController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<TopicoDto> update(@PathVariable("id") Long pIdTopico,
-                                            @RequestBody @Valid TopicoUpdateForm pTopico,
-                                            UriComponentsBuilder uriComponentsBuilder) {
+                                            @RequestBody @Valid TopicoUpdateForm pTopico) {
 
         TopicoEntity topico = topicoService.update(pIdTopico, pTopico);
 
         return ResponseEntity.ok(new TopicoDto(topico));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable("id") Long pIdTopico) {
+
+        topicoService.delete(pIdTopico);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -63,4 +63,9 @@ public class TopicoService {
 
         return topico;
     }
+
+    public void delete(Long pIdTopico) {
+
+        topicoRepository.deleteById(pIdTopico);
+    }
 }
