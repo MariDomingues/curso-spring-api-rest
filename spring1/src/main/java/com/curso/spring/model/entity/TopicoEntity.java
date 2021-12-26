@@ -1,7 +1,7 @@
 package com.curso.spring.model.entity;
 
 import com.curso.spring.model.enums.StatusTopico;
-import com.curso.spring.model.form.TopicoForm;
+import com.curso.spring.model.form.TopicoInsertForm;
 import com.curso.spring.service.CursoService;
 
 import javax.persistence.*;
@@ -35,7 +35,7 @@ public class TopicoEntity {
 	public TopicoEntity() {
 	}
 
-	public TopicoEntity(TopicoForm pTopico, CursoService cursoService) {
+	public TopicoEntity(TopicoInsertForm pTopico, CursoService cursoService) {
 
 		this.titulo = pTopico.getTitulo();
 		this.mensagem = pTopico.getMensagem();

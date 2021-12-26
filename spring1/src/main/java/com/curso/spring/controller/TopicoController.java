@@ -3,11 +3,12 @@ package com.curso.spring.controller;
 import com.curso.spring.model.dto.TopicoDetalheDto;
 import com.curso.spring.model.dto.TopicoDto;
 import com.curso.spring.model.entity.TopicoEntity;
-import com.curso.spring.model.form.TopicoForm;
+import com.curso.spring.model.form.TopicoInsertForm;
+import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -34,7 +35,7 @@ public class TopicoController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoForm pTopico, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico, UriComponentsBuilder uriComponentsBuilder) {
 
         TopicoEntity topico = topicoService.insert(pTopico);
 
@@ -42,5 +43,16 @@ public class TopicoController {
                 .path("/topicos/{id}")
                 .buildAndExpand(topico.getId())
                 .toUri()).body(new TopicoDto(topico));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<TopicoDto> update(@PathVariable("id") Long pIdTopico,
+                                            @RequestBody @Valid TopicoUpdateForm pTopico,
+                                            UriComponentsBuilder uriComponentsBuilder) {
+
+        TopicoEntity topico = topicoService.update(pIdTopico, pTopico);
+
+        return ResponseEntity.ok(new TopicoDto(topico));
     }
 }

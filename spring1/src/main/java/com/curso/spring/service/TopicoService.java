@@ -3,11 +3,13 @@ package com.curso.spring.service;
 import com.curso.spring.model.dto.TopicoDetalheDto;
 import com.curso.spring.model.dto.TopicoDto;
 import com.curso.spring.model.entity.TopicoEntity;
-import com.curso.spring.model.form.TopicoForm;
+import com.curso.spring.model.form.TopicoInsertForm;
+import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class TopicoService {
         return TopicoDto.converter(vTopico);
     }
 
-    public TopicoEntity insert(TopicoForm pTopico) {
+    public TopicoEntity insert(TopicoInsertForm pTopico) {
 
         TopicoEntity topico = new TopicoEntity(pTopico, cursoService);
 
@@ -46,5 +48,19 @@ public class TopicoService {
     public TopicoDetalheDto carregar(Long pIdTopico) {
 
         return new TopicoDetalheDto(topicoRepository.getById(pIdTopico));
+    }
+
+    public TopicoEntity update(Long pIdTopico, TopicoUpdateForm pTopico) {
+
+        TopicoEntity topico = pTopico.update(pIdTopico, topicoRepository);
+
+        /*
+            Não precisa chamar um método específico para atualizar as informações,
+            ele já irá fazer isso ao final do método chamado automaticamente.
+            Porém, precisa colocar a anotação @Transaction para que o JPA commit.
+         */
+//        topicoRepository.save(topico);
+
+        return topico;
     }
 }

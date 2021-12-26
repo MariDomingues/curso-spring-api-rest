@@ -1,12 +1,11 @@
 package com.curso.spring.model.form;
 
-import com.curso.spring.model.entity.CursoEntity;
 import com.curso.spring.model.entity.UsuarioEntity;
 import com.sun.istack.NotNull;
 
 import javax.validation.constraints.NotEmpty;
 
-public class TopicoForm {
+public class TopicoInsertForm {
 
 	@NotNull @NotEmpty
 	private String titulo;
