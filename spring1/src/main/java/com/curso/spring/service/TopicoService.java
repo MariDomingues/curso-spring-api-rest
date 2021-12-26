@@ -8,9 +8,7 @@ import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +23,15 @@ public class TopicoService {
     @Autowired
     private CursoService cursoService;
 
-    public Page<TopicoDto> consultar(String pNomeCurso, int pNumeroPagina, int pQuantidade, String pOrdenacao) {
-
-        Pageable pageable = PageRequest.of(pNumeroPagina, pQuantidade, Sort.Direction.ASC, pOrdenacao);
+    public Page<TopicoDto> consultar(String pNomeCurso, Pageable pPageable) {
 
         Page<TopicoEntity> vTopico;
         if (pNomeCurso == null) {
 
-            vTopico = topicoRepository.findAll(pageable);
+            vTopico = topicoRepository.findAll(pPageable);
 
         } else {
-            vTopico = topicoRepository.findByCurso_Nome(pNomeCurso, pageable);
+            vTopico = topicoRepository.findByCurso_Nome(pNomeCurso, pPageable);
         }
 
         return TopicoDto.converter(vTopico);

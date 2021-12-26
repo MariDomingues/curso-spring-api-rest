@@ -8,13 +8,13 @@ import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("topico")
@@ -24,16 +24,16 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @GetMapping
+    //URL: localhost:8080/topico?page=0&size=10&sort=id,asc
     //RequestParam indica que é um parâmetro obrigatório e ele vem pela URL
     public Page<TopicoDto> lista(@RequestParam(required = false) String pNomeCurso,
-                                 @RequestParam int pNumeroPagina,
-                                 @RequestParam int pQuantidade,
-                                 @RequestParam String pOrdenacao) {
+                                 @RequestParam Pageable pPageable) {
 
-        return topicoService.consultar(pNomeCurso, pNumeroPagina, pQuantidade, pOrdenacao);
+        return topicoService.consultar(pNomeCurso, pPageable);
     }
 
     @GetMapping("/{id}")
+    //URL: localhost:8080/topico?id=1
     public ResponseEntity<TopicoDetalheDto> carregar(@PathVariable("id") Long pIdTopico) {
 
         return topicoService.carregar(pIdTopico);
@@ -42,7 +42,8 @@ public class TopicoController {
     @PostMapping
     @Transactional
     //RequestBody indica que o parâmetro irá vir no corpo da requisição
-    public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico,
+                                            UriComponentsBuilder uriComponentsBuilder) {
 
         TopicoEntity topico = topicoService.insert(pTopico);
 
