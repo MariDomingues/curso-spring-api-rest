@@ -23,7 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         pHttp.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/topico").permitAll()
-                .antMatchers(HttpMethod.GET, "/topico/*").permitAll();
+                .antMatchers(HttpMethod.GET, "/topico/*").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin();
     }
 
     @Override
