@@ -7,6 +7,7 @@ import com.curso.spring.model.form.TopicoInsertForm;
 import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,8 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
+    //quando inserir um novo tópico ele vai limpar o cache do método lista
+    @CacheEvict(value = "listaTopico", allEntries = true)
     //RequestBody indica que o parâmetro irá vir no corpo da requisição
     public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico,
                                             UriComponentsBuilder uriComponentsBuilder) {
