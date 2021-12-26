@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("topico")
+@RequestMapping("/topico")
 public class TopicoController {
 
     @Autowired
@@ -33,13 +33,13 @@ public class TopicoController {
     //RequestParam indica que é um parâmetro obrigatório e ele vem pela URL
     public Page<TopicoDto> lista(@RequestParam(required = false) String pNomeCurso,
                                  //caso não venha nenhuma ordenação, ele vai ordenar o PageableDefault
-                                 @RequestParam(required = false) @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pPageable) {
+                                 @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pPageable) {
 
         return topicoService.consultar(pNomeCurso, pPageable);
     }
 
     @GetMapping("/{id}")
-    //URL: localhost:8080/topico?id=1
+    //URL: localhost:8080/topico/1
     public ResponseEntity<TopicoDetalheDto> carregar(@PathVariable("id") Long pIdTopico) {
 
         return topicoService.carregar(pIdTopico);
