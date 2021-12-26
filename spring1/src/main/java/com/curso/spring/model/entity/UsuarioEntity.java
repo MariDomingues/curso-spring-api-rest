@@ -2,6 +2,7 @@ package com.curso.spring.model.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class UsuarioEntity implements UserDetails {
 
 	public void setSenha(String senha) {
 
-		this.senha = senha;
+		this.senha = new BCryptPasswordEncoder().encode(senha);
 	}
 
 	public List<PerfilEntity> getvPerfil() {
