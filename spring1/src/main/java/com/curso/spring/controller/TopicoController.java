@@ -26,10 +26,11 @@ public class TopicoController {
     @GetMapping
     //RequestParam indica que é um parâmetro obrigatório e ele vem pela URL
     public Page<TopicoDto> lista(@RequestParam(required = false) String pNomeCurso,
-                                 @RequestParam(required = true) int pNumeroPagina,
-                                 @RequestParam(required = true)int pQuantidade) {
+                                 @RequestParam int pNumeroPagina,
+                                 @RequestParam int pQuantidade,
+                                 @RequestParam String pOrdenacao) {
 
-        return topicoService.consultar(pNomeCurso, pNumeroPagina, pQuantidade);
+        return topicoService.consultar(pNomeCurso, pNumeroPagina, pQuantidade, pOrdenacao);
     }
 
     @GetMapping("/{id}")
