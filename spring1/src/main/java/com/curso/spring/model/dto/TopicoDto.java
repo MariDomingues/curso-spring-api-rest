@@ -1,10 +1,9 @@
 package com.curso.spring.model.dto;
 
 import com.curso.spring.model.entity.TopicoEntity;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class TopicoDto {
 
@@ -37,8 +36,8 @@ public class TopicoDto {
 		return dataCriacao;
 	}
 
-	public static List<TopicoDto> converter(List<TopicoEntity> pListTopico) {
+	public static Page<TopicoDto> converter(Page<TopicoEntity> pListTopico) {
 
-		return pListTopico.stream().map(TopicoDto::new).collect(Collectors.toList());
+		return pListTopico.map(TopicoDto::new);
 	}
 }

@@ -7,6 +7,7 @@ import com.curso.spring.model.form.TopicoInsertForm;
 import com.curso.spring.model.form.TopicoUpdateForm;
 import com.curso.spring.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,12 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @GetMapping
-    public List<TopicoDto> lista(String pNomeCurso) {
+    //RequestParam indica que é um parâmetro obrigatório e ele vem pela URL
+    public Page<TopicoDto> lista(@RequestParam(required = false) String pNomeCurso,
+                                 @RequestParam(required = true) int pNumeroPagina,
+                                 @RequestParam(required = true)int pQuantidade) {
 
-        return topicoService.consultar(pNomeCurso);
+        return topicoService.consultar(pNomeCurso, pNumeroPagina, pQuantidade);
     }
 
     @GetMapping("/{id}")
@@ -36,6 +40,7 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
+    //RequestBody indica que o parâmetro irá vir no corpo da requisição
     public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoInsertForm pTopico, UriComponentsBuilder uriComponentsBuilder) {
 
         TopicoEntity topico = topicoService.insert(pTopico);
