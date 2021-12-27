@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/topico").permitAll()
                 .antMatchers(HttpMethod.GET, "/topico/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 //Essa configuração evita que uma URL que não foi configurada seja pública.
                 .anyRequest().authenticated()
                 .and().csrf().disable()
