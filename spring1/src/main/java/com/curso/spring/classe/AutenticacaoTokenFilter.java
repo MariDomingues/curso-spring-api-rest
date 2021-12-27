@@ -1,5 +1,7 @@
 package com.curso.spring.classe;
 
+import com.curso.spring.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -11,12 +13,19 @@ import java.io.IOException;
 //intercepta a requisição e executar a lógica antes que caia no controller
 public class AutenticacaoTokenFilter extends OncePerRequestFilter {
 
+    private TokenService tokenService;
+
+    public AutenticacaoTokenFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest pRequest,
                                     HttpServletResponse pResponse,
                                     FilterChain pFilterChain) throws ServletException, IOException {
 
         String token = recuperarToken(pRequest);
+        boolean tokenValido = tokenService.isValid(token);
 
         pFilterChain.doFilter(pRequest, pResponse);
     }

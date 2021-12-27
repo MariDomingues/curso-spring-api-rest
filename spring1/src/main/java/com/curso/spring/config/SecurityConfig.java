@@ -1,6 +1,7 @@
 package com.curso.spring.config;
 
 import com.curso.spring.classe.AutenticacaoTokenFilter;
+import com.curso.spring.service.TokenService;
 import com.curso.spring.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailService userDetailService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     //Configura a recursos estáticos - JS, CSS, imagens, etc
     public void configure(WebSecurity web) throws Exception {
@@ -41,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 //não cria uma sessão
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AutenticacaoTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AutenticacaoTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
                 //gerar automaticamente um formulário de login
                 //.and().formLogin();
     }
