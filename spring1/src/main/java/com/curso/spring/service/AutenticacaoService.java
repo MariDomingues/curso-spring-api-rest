@@ -1,5 +1,6 @@
 package com.curso.spring.service;
 
+import com.curso.spring.model.dto.TokenDto;
 import com.curso.spring.model.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,18 @@ public class AutenticacaoService {
     @Autowired
     private TokenService tokenService;
 
-    public ResponseEntity autenticar(LoginForm pLogin) {
+    public ResponseEntity<TokenDto> autenticar(LoginForm pLogin) {
 
         UsernamePasswordAuthenticationToken dadosLogin = pLogin.converter();
 
         try {
             Authentication authenticate = authenticationManager.authenticate(dadosLogin);
-            String token = tokenService.gerar(authenticate);
+            TokenDto token = tokenService.gerar(authenticate);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(token);
 
         } catch (AuthenticationException e) {
-
+            
             return ResponseEntity.badRequest().build();
         }
     }

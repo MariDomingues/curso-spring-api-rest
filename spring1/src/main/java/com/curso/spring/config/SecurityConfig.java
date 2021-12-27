@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         pHttp.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/topico").permitAll()
                 .antMatchers(HttpMethod.GET, "/topico/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/auth").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 //Essa configuração evita que uma URL que não foi configurada seja pública.
                 .anyRequest().authenticated()
                 .and().csrf().disable()

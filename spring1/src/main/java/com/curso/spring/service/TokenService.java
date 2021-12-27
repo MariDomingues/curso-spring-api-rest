@@ -1,5 +1,6 @@
 package com.curso.spring.service;
 
+import com.curso.spring.model.dto.TokenDto;
 import com.curso.spring.model.entity.UsuarioEntity;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,18 +20,18 @@ public class TokenService {
     @Value("${forum.jwt.secret}")
     private String secret;
 
-    public String gerar(Authentication pAuthenticate) {
+    public TokenDto gerar(Authentication pAuthenticate) {
 
         UsuarioEntity usuario = (UsuarioEntity) pAuthenticate.getPrincipal();
         Date hoje = new Date();
         Date dataExpiracao = new Date(hoje.getTime() + Long.parseLong(expiration));
 
-        return Jwts.builder()
+        return new TokenDto(Jwts.builder()
                 .setIssuer("API Fórum Alura")
                 .setSubject(usuario.getId().toString())
                 .setIssuedAt(hoje)
                 .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+                .compact(), "Bearer");
     }
 }
