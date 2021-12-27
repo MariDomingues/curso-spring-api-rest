@@ -1,7 +1,10 @@
 package com.curso.spring.classe;
 
+import com.curso.spring.model.entity.UsuarioEntity;
 import com.curso.spring.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.curso.spring.service.UsuarioService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -14,9 +17,11 @@ import java.io.IOException;
 public class AutenticacaoTokenFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
+    private UsuarioService usuarioService;
 
-    public AutenticacaoTokenFilter(TokenService tokenService) {
+    public AutenticacaoTokenFilter(TokenService tokenService, UsuarioService usuarioService) {
         this.tokenService = tokenService;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -27,7 +32,22 @@ public class AutenticacaoTokenFilter extends OncePerRequestFilter {
         String token = recuperarToken(pRequest);
         boolean tokenValido = tokenService.isValid(token);
 
+        if (tokenValido) {
+
+            autenticarCliente(token);
+        }
+
         pFilterChain.doFilter(pRequest, pResponse);
+    }
+
+    private void autenticarCliente(String pToken) {
+
+        long idUsuario = tokenService.getIdUsuario(pToken);
+        UsuarioEntity usuario = usuarioService.getUsuario(idUsuario);
+
+        UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(autenticacao);
     }
 
     private String recuperarToken(HttpServletRequest pRequest) {

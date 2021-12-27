@@ -2,6 +2,7 @@ package com.curso.spring.service;
 
 import com.curso.spring.model.dto.TokenDto;
 import com.curso.spring.model.entity.UsuarioEntity;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,5 +45,11 @@ public class TokenService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public long getIdUsuario(String pToken) {
+
+        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(pToken).getBody();
+        return Long.parseLong(claims.getSubject());
     }
 }
