@@ -1,31 +1,36 @@
 package com.curso.spring.service;
 
-import com.curso.spring.model.entity.UsuarioEntity;
-import com.curso.spring.repository.UsuarioRepository;
+import com.curso.spring.model.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class AutenticacaoService implements UserDetailsService {
+public class AutenticacaoService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private AuthenticationManager authenticationManager;
 
-    @Override
-    public UserDetails loadUserByUsername(String pUsername) throws UsernameNotFoundException {
+    @Autowired
+    private TokenService tokenService;
 
-        Optional<UsuarioEntity> usuarioConsulta = usuarioRepository.findByEmail(pUsername);
+    public ResponseEntity autenticar(LoginForm pLogin) {
 
-        if (usuarioConsulta.isPresent()) {
+        UsernamePasswordAuthenticationToken dadosLogin = pLogin.converter();
 
-            return usuarioConsulta.get();
+        try {
+            Authentication authenticate = authenticationManager.authenticate(dadosLogin);
+            String token = tokenService.gerar(authenticate);
+
+            return ResponseEntity.ok().build();
+
+        } catch (AuthenticationException e) {
+
+            return ResponseEntity.badRequest().build();
         }
-
-        throw new UsernameNotFoundException("Dados Inválidos!");
     }
 }
