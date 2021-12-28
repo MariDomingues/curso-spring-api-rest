@@ -9,14 +9,15 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class SwaggerConfig {
@@ -28,7 +29,15 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.curso.spring"))
                 .paths(PathSelectors.ant("/**"))
                 .build()
-                .ignoredParameterTypes(UsuarioEntity.class);
+                .ignoredParameterTypes(UsuarioEntity.class)
+                .globalRequestParameters(
+                        Arrays.asList(
+                                new RequestParameterBuilder()
+                                        .name("Authorization")
+                                        .description("Header para Token JWT")
+                                        .required(false)
+                                        .in("header")
+                                        .build()));
     }
 
     @Bean
