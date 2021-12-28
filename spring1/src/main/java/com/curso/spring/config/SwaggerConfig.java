@@ -48,7 +48,7 @@ public class SwaggerConfig {
             }
 
             private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(List<T> mappings) {
-                
+
                 mappings.removeIf(mapping -> mapping.getPatternParser() != null);
             }
 
