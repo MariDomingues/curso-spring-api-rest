@@ -27,8 +27,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.curso.spring"))
-                .paths(PathSelectors.ant("/**"))
-                .build()
+                .paths(PathSelectors.ant("/**"))                .build()
                 .ignoredParameterTypes(UsuarioEntity.class)
                 .globalRequestParameters(
                         Arrays.asList(
