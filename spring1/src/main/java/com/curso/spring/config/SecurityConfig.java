@@ -18,8 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -32,43 +32,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UsuarioService usuarioService;
 
     @Override
-    //Configura a recursos estáticos - JS, CSS, imagens, etc
-    public void configure(WebSecurity pWeb) throws Exception {
-
-        pWeb.ignoring()
-                .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
-    }
-
-    @Override
-    //Configura a autorização - URL, quem pode acessar cada URL, perfil de acesso
-    protected void configure(HttpSecurity pHttp) throws Exception {
-
-        pHttp.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/topico").permitAll()
-                .antMatchers(HttpMethod.GET, "/topico/*").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth").permitAll()
-                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                //Essa configuração evita que uma URL que não foi configurada seja pública.
-                .anyRequest().authenticated()
-                .and().csrf().disable()
-                //não cria uma sessão
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AutenticacaoTokenFilter(tokenService, usuarioService), UsernamePasswordAuthenticationFilter.class);
-                //gerar automaticamente um formulário de login
-                //.and().formLogin();
-    }
-
-    @Override
-    //Configura a autenticação - login
-    protected void configure(AuthenticationManagerBuilder pAuth) throws Exception {
-
-        pAuth.userDetailsService(userDetailService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }
-
-    @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    //Configuracoes de autenticacao
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailService).passwordEncoder(new BCryptPasswordEncoder());
+    }
+
+    //Configuracoes de autorizacao
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/topicos").permitAll()
+                .antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                .anyRequest().authenticated()
+                .and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new AutenticacaoTokenFilter(tokenService, usuarioService), UsernamePasswordAuthenticationFilter.class);
+    }
+
+
+    //Configuracoes de recursos estaticos(js, css, imagens, etc.)
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
     }
 }

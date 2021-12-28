@@ -3,6 +3,7 @@ package com.curso.spring.classe;
 import com.curso.spring.model.entity.UsuarioEntity;
 import com.curso.spring.service.TokenService;
 import com.curso.spring.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,7 +17,10 @@ import java.io.IOException;
 //intercepta a requisição e executar a lógica antes que caia no controller
 public class AutenticacaoTokenFilter extends OncePerRequestFilter {
 
+    @Autowired
     private TokenService tokenService;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     public AutenticacaoTokenFilter(TokenService tokenService, UsuarioService usuarioService) {

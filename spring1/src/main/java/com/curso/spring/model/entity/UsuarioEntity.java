@@ -13,92 +13,93 @@ import java.util.List;
 @Table(name = "usuario")
 public class UsuarioEntity implements UserDetails {
 
-	@Id
-	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long id;
-	private String nome;
-	private String email;
-	private String senha;
+    @Id
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    private Long id;
+    private String nome;
+    private String email;
+    private String senha;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private List<PerfilEntity> vPerfil = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<PerfilEntity> vPerfil = new ArrayList<>();
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getSenha() {
-		return senha;
-	}
+    public String getSenha() {
+        return senha;
+    }
 
-	public void setSenha(String senha) {
+    public void setSenha(String senha) {
 
-		this.senha = new BCryptPasswordEncoder().encode(senha);
-	}
+        this.senha = new BCryptPasswordEncoder().encode(senha);
+    }
 
-	public List<PerfilEntity> getvPerfil() {
-		return vPerfil;
-	}
+    public List<PerfilEntity> getvPerfil() {
+        return vPerfil;
+    }
 
-	public void setvPerfil(List<PerfilEntity> vPerfil) {
-		this.vPerfil = vPerfil;
-	}
+    public void setvPerfil(List<PerfilEntity> vPerfil) {
+        this.vPerfil = vPerfil;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return this.getvPerfil();
-	}
+        return this.getvPerfil();
+    }
 
-	@Override
-	public String getPassword() {
+    @Override
+    public String getPassword() {
 
-		return this.getSenha();
-	}
+        return this.getSenha();
+    }
 
-	@Override
-	public String getUsername() {
+    @Override
+    public String getUsername() {
 
-		return this.getEmail();
-	}
+        return this.getEmail();
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
+    @Override
+    public boolean isAccountNonExpired() {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
+    @Override
+    public boolean isAccountNonLocked() {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
+    @Override
+    public boolean isCredentialsNonExpired() {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean isEnabled() {
+    @Override
+    public boolean isEnabled() {
 
-		return true;
-	}
+        return true;
+    }
 }
+

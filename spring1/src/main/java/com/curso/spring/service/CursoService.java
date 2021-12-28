@@ -4,6 +4,7 @@ import com.curso.spring.model.entity.CursoEntity;
 import com.curso.spring.repository.CursoRepository;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class CursoService {
 
