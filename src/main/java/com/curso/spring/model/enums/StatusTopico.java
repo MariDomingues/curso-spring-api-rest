@@ -6,5 +6,4 @@ public enum StatusTopico {
     NAO_SOLUCIONADO,
     SOLUCIONADO,
     FECHADO;
-
 }

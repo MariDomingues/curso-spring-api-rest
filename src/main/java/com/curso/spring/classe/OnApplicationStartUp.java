@@ -1,10 +1,13 @@
 package com.curso.spring.classe;
 
 import com.curso.spring.model.entity.CursoEntity;
+import com.curso.spring.model.entity.PerfilEntity;
 import com.curso.spring.model.entity.TopicoEntity;
 import com.curso.spring.model.entity.UsuarioEntity;
+import com.curso.spring.model.enums.PerfilUsuario;
 import com.curso.spring.model.enums.StatusTopico;
 import com.curso.spring.repository.CursoRepository;
+import com.curso.spring.repository.PerfilRepository;
 import com.curso.spring.repository.TopicoRepository;
 import com.curso.spring.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Component
 public class OnApplicationStartUp {
@@ -26,8 +31,24 @@ public class OnApplicationStartUp {
     @Autowired
     private TopicoRepository topicoRepository;
 
+    @Autowired
+    private PerfilRepository perfilRepository;
+
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
+        if (perfilRepository.findAll().isEmpty()) {
+
+            PerfilEntity perfil = new PerfilEntity();
+            perfil.setNomePerfil(PerfilUsuario.USUARIO.getDescricao());
+
+            perfilRepository.save(perfil);
+
+            perfil = new PerfilEntity();
+            perfil.setNomePerfil(PerfilUsuario.MODERADOR.getDescricao());
+
+            perfilRepository.save(perfil);
+        }
 
         if (usuarioRepository.findAll().isEmpty()) {
 
@@ -37,6 +58,27 @@ public class OnApplicationStartUp {
             usuario.setSenha("123");
 
             usuarioRepository.save(usuario);
+
+            usuario = new UsuarioEntity();
+            usuario.setNome("Moderador");
+            usuario.setEmail("moderador@email.com");
+            usuario.setSenha("123");
+
+            usuarioRepository.save(usuario);
+        }
+
+        if (!perfilRepository.findAll().isEmpty() &&
+                !usuarioRepository.findAll().isEmpty()) {
+
+            Optional<UsuarioEntity> usuario = usuarioRepository.findByEmail("aluno@email.com");
+            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.USUARIO.getDescricao()).get()));
+
+            usuarioRepository.save(usuario.get());
+
+            usuario = usuarioRepository.findByEmail("moderador@email.com");
+            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.MODERADOR.getDescricao()).get()));
+
+            usuarioRepository.save(usuario.get());
         }
 
         if (cursoRepository.findAll().isEmpty()) {

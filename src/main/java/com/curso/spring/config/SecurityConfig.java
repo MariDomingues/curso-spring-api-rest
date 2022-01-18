@@ -1,6 +1,7 @@
 package com.curso.spring.config;
 
 import com.curso.spring.classe.AutenticacaoTokenFilter;
+import com.curso.spring.model.enums.PerfilUsuario;
 import com.curso.spring.service.TokenService;
 import com.curso.spring.service.UserDetailService;
 import com.curso.spring.service.UsuarioService;
@@ -52,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/topico/*").hasRole(PerfilUsuario.MODERADOR.getDescricao().substring(5, PerfilUsuario.MODERADOR.getDescricao().length()))
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

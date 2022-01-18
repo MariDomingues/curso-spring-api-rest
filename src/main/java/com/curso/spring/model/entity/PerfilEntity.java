@@ -16,6 +16,13 @@ public class PerfilEntity implements GrantedAuthority {
     private Long id;
     private String nomePerfil;
 
+    public PerfilEntity() {
+    }
+
+    public PerfilEntity(String nomePerfil) {
+        this.nomePerfil = nomePerfil;
+    }
+
     public Long getId() {
         return id;
     }
