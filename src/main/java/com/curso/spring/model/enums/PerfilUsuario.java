@@ -12,6 +12,10 @@ public enum PerfilUsuario {
     }
 
     public String getDescricao() {
+        return descricao.substring(5, descricao.length());
+    }
+
+    public String getDescricaoRole() {
         return descricao;
     }
 }

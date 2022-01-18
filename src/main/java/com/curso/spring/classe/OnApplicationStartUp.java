@@ -40,12 +40,12 @@ public class OnApplicationStartUp {
         if (perfilRepository.findAll().isEmpty()) {
 
             PerfilEntity perfil = new PerfilEntity();
-            perfil.setNomePerfil(PerfilUsuario.USUARIO.getDescricao());
+            perfil.setNomePerfil(PerfilUsuario.USUARIO.getDescricaoRole());
 
             perfilRepository.save(perfil);
 
             perfil = new PerfilEntity();
-            perfil.setNomePerfil(PerfilUsuario.MODERADOR.getDescricao());
+            perfil.setNomePerfil(PerfilUsuario.MODERADOR.getDescricaoRole());
 
             perfilRepository.save(perfil);
         }
@@ -71,12 +71,12 @@ public class OnApplicationStartUp {
                 !usuarioRepository.findAll().isEmpty()) {
 
             Optional<UsuarioEntity> usuario = usuarioRepository.findByEmail("aluno@email.com");
-            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.USUARIO.getDescricao()).get()));
+            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.USUARIO.getDescricaoRole()).get()));
 
             usuarioRepository.save(usuario.get());
 
             usuario = usuarioRepository.findByEmail("moderador@email.com");
-            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.MODERADOR.getDescricao()).get()));
+            usuario.get().setvPerfil(Arrays.asList(perfilRepository.findByNomePerfil(PerfilUsuario.MODERADOR.getDescricaoRole()).get()));
 
             usuarioRepository.save(usuario.get());
         }

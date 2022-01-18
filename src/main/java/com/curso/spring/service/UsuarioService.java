@@ -15,4 +15,9 @@ public class UsuarioService {
 
         return usuarioRepository.findById(pIdUsuario).get();
     }
+
+    public void save(UsuarioEntity pUsuario) {
+        
+        usuarioRepository.save(pUsuario);
+    }
 }

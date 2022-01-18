@@ -19,4 +19,10 @@ public class LoginForm {
 
         return new UsernamePasswordAuthenticationToken(this.usuario, this.senha);
     }
+
+    @Override
+    public String toString() {
+        return "{\"usuario\":\"" + usuario +
+                "\", \"senha\":\"" + senha + "\"}";
+    }
 }

@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class AutenticacaoService {
 
     @Autowired
