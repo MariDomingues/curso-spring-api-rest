@@ -1,5 +1,6 @@
 package com.curso.spring.controller;
 
+import com.curso.spring.model.dto.TokenDto;
 import com.curso.spring.model.form.LoginForm;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -56,10 +57,13 @@ public class AutenticacaoControllerTest {
         login.setUsuario("aluno@email.com");
         login.setSenha("123");
 
+        TokenDto token = new TokenDto("", "Bearer");
+
         mockMvc.perform(MockMvcRequestBuilders
                 .post(uri)
                 .content(login.toString())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.tipo").value("Bearer"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token").isString());
     }
 }

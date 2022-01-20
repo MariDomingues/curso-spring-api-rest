@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+
+  forum:
+    image: forum
+    container_name: forum
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}${POSTGRES_DB}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - FORUM_JWT_SECRET=${FORUM_JWT_SECRET}
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - db
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5000:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
